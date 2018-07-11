@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>las2peer-comment-widget demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../las2peer-comment-widget.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic las2peer-comment-widget demo</h3>
+      <demo-snippet>
+        <template>
+          <las2peer-comment-widget
+                  id="comments"
+                  login-name="alice"
+                  login-password="pwalice">
+          </las2peer-comment-widget>
+        </template>
+      </demo-snippet>
+      <script>
+          var comments = document.getElementById("comments")
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState === 4 && xhttp.status === 201) {
+          localStorage.setItem("thread", xhttp.responseText);
+          comments.setAttribute("thread", localStorage.getItem("thread"))
+        }
+      };
+      xhttp.open("POST", "http://DCBO.localdomain:8080/commentmanagement/threads", true);
+      xhttp.setRequestHeader("Authorization", "Basic " + btoa("alice:pwalice"));
+      xhttp.send('{owner:"alice",writer:"bobby",reader:"joey"}');
+      </script>
+    </div>
+  </body>
+</html>
